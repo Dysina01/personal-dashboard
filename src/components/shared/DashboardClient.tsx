@@ -5,6 +5,7 @@ import { MonthSelector } from "@/components/shared/MonthSelector";
 import { NavChips } from "@/components/shared/NavChips";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { TABS } from "@/types";
+import { HabitsModule } from "@/modules/habits/HabitsModule";
 
 // modules — بعداً اضافه میشن
 function Placeholder({ label }: { label: string }) {
@@ -33,7 +34,9 @@ function DashboardContent({ userId }: { userId: string }) {
       {/* module content */}
       <div className="flex-1 overflow-y-auto">
         {activeTab === "analytics" && <Placeholder label="Analytics" />}
-        {activeTab === "habits" && <Placeholder label="Habit Tracker" />}
+        {activeTab === "habits" && (
+          <HabitsModule userId={userId} month={selectedMonth} />
+        )}{" "}
         {activeTab === "reading" && <Placeholder label="Reading" />}
         {activeTab === "gym" && <Placeholder label="Gym" />}
       </div>
