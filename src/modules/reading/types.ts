@@ -5,7 +5,7 @@ export interface Book {
   author: string | null;
   cover_url: string | null;
   total_pages: number;
-  status: "active" | "finished" | "dnf";
+  status: string;
   started_at: string;
   finished_at: string | null;
   created_at: string;
