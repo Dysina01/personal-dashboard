@@ -6,6 +6,7 @@ import { NavChips } from "@/components/shared/NavChips";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { TABS } from "@/types";
 import { HabitsModule } from "@/modules/habits/HabitsModule";
+import { ReadingModule } from "@/modules/reading/ReadingModule";
 
 // modules — بعداً اضافه میشن
 function Placeholder({ label }: { label: string }) {
@@ -37,7 +38,7 @@ function DashboardContent({ userId }: { userId: string }) {
         {activeTab === "habits" && (
           <HabitsModule userId={userId} month={selectedMonth} />
         )}{" "}
-        {activeTab === "reading" && <Placeholder label="Reading" />}
+        {activeTab === "reading" && <ReadingModule userId={userId} />}{" "}
         {activeTab === "gym" && <Placeholder label="Gym" />}
       </div>
     </div>
