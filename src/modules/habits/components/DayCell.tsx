@@ -15,26 +15,25 @@ export function DayCell({ completed, isToday, isFuture, onToggle }: Props) {
       onClick={isFuture ? undefined : onToggle}
       disabled={isFuture}
       className={cn(
-        "flex-1 h-9 rounded-sm flex items-center justify-center",
+        "flex-1 h-10 rounded-xl flex items-center justify-center",
         "transition-all duration-fast active:scale-90",
-        "border",
         completed
-          ? "bg-accent border-accent"
+          ? "bg-linear-to-br from-emerald-500 to-teal-600 shadow-card"
           : isToday
-            ? "bg-transparent border-accent"
+            ? "bg-transparent border-2 border-emerald-500/50"
             : isFuture
-              ? "bg-fill-primary border-transparent opacity-30 cursor-default"
-              : "bg-fill-primary border-transparent",
+              ? "bg-fill-primary opacity-30 cursor-default"
+              : "bg-fill-primary",
       )}
     >
       {completed && (
         <svg
-          width="13"
-          height="13"
+          width="14"
+          height="14"
           viewBox="0 0 13 13"
           fill="none"
           stroke="white"
-          strokeWidth="2.2"
+          strokeWidth="2.4"
           strokeLinecap="round"
           strokeLinejoin="round"
           className="pointer-events-none"
