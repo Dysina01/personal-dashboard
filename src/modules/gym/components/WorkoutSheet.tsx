@@ -19,7 +19,10 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function createDraftSet(exerciseId: string, setOrder: number): DraftExerciseSet {
+function createDraftSet(
+  exerciseId: string,
+  setOrder: number,
+): DraftExerciseSet {
   return {
     exerciseId,
     setOrder,
@@ -38,7 +41,10 @@ export function WorkoutSheet({ userId, month, program, onClose }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const saveWorkout = useSaveWorkoutSession(userId, month);
-  const { data: previousSession } = usePreviousWorkoutSession(userId, program.id);
+  const { data: previousSession } = usePreviousWorkoutSession(
+    userId,
+    program.id,
+  );
 
   const completeSets = useMemo(
     () =>
@@ -114,11 +120,11 @@ export function WorkoutSheet({ userId, month, program, onClose }: Props) {
   }
 
   return (
-    <div className="flex max-h-[90vh] flex-col pb-8">
+    <div className="flex max-h-[90vh] flex-col overflow-x-hidden pb-8">
+      {" "}
       <div className="flex justify-center pb-2 pt-3">
         <div className="h-1 w-9 rounded-full bg-border-strong" />
       </div>
-
       <div className="px-5">
         <div className="mb-5">
           <p className="text-title font-semibold text-text-primary">
@@ -189,13 +195,13 @@ export function WorkoutSheet({ userId, month, program, onClose }: Props) {
                   {exerciseSets.map((set) => (
                     <div
                       key={`${set.exerciseId}-${set.index}`}
-                      className="grid grid-cols-[40px_1fr_1fr_36px] items-center gap-2"
+                      className="grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)_36px] items-center gap-2"
                     >
                       <div className="text-center text-caption font-medium text-text-muted">
                         {set.setOrder}
                       </div>
                       <input
-                        className="h-11 rounded-input border border-border bg-fill-primary px-3 text-center text-callout text-text-primary placeholder:text-text-muted focus:border-accent focus:bg-accent-50 focus:outline-none"
+                        className="h-11 w-full min-w-0 rounded-input border border-border bg-fill-primary px-3 text-center text-callout text-text-primary placeholder:text-text-muted focus:border-accent focus:bg-accent-50 focus:outline-none"
                         type="number"
                         inputMode="decimal"
                         placeholder="kg"
@@ -205,7 +211,7 @@ export function WorkoutSheet({ userId, month, program, onClose }: Props) {
                         }
                       />
                       <input
-                        className="h-11 rounded-input border border-border bg-fill-primary px-3 text-center text-callout text-text-primary placeholder:text-text-muted focus:border-accent focus:bg-accent-50 focus:outline-none"
+                        className="h-11 w-full min-w-0 rounded-input border border-border bg-fill-primary px-3 text-center text-callout text-text-primary placeholder:text-text-muted focus:border-accent focus:bg-accent-50 focus:outline-none"
                         type="number"
                         inputMode="numeric"
                         placeholder="reps"
