@@ -116,3 +116,20 @@ export async function markBookFinished(bookId: string): Promise<void> {
 
   if (error) throw error;
 }
+export async function getLatestEntriesForBooks(
+  userId: string,
+): Promise<Record<string, ReadingEntry>> {
+  const { data, error } = await supabase
+    .from("reading_entries")
+    .select("*")
+    .eq("user_id", userId)
+    .order("date", { ascending: false });
+
+  if (error) throw error;
+
+  const latestByBook: Record<string, ReadingEntry> = {};
+  for (const entry of data) {
+    if (!latestByBook[entry.book_id]) latestByBook[entry.book_id] = entry;
+  }
+  return latestByBook;
+}

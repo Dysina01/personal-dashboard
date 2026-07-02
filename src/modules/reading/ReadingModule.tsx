@@ -1,15 +1,15 @@
 "use client";
 
-import { useState }         from "react";
-import { useBooks }         from "./hooks/useReading";
+import { useState } from "react";
+import { useBooks, useLatestReadingEntries } from "./hooks/useReading";
 import { BookCard, BookCardSkeleton } from "./components/BookCard";
-import { BookDetailSheet }  from "./components/BookDetailSheet";
-import { AddBookForm }      from "./components/AddBookForm";
-import { ModuleContainer }  from "@/components/shared/layout/ModuleContainer";
-import { Section }          from "@/components/shared/layout/Section";
-import { EmptyState }       from "@/components/shared/feedback/EmptyState";
-import { ErrorState }       from "@/components/shared/feedback/ErrorState";
-import type { Book }        from "./types";
+import { BookDetailSheet } from "./components/BookDetailSheet";
+import { AddBookForm } from "./components/AddBookForm";
+import { ModuleContainer } from "@/components/shared/layout/ModuleContainer";
+import { Section } from "@/components/shared/layout/Section";
+import { EmptyState } from "@/components/shared/feedback/EmptyState";
+import { ErrorState } from "@/components/shared/feedback/ErrorState";
+import type { Book } from "./types";
 
 interface Props {
   userId: string;
@@ -17,16 +17,13 @@ interface Props {
 
 export function ReadingModule({ userId }: Props) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  const [showAddForm,  setShowAddForm]  = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const { data: books = [], isLoading, isError, refetch } = useBooks(userId);
+  const { data: latestEntries = {} } = useLatestReadingEntries(userId);
 
-  const activeBooks   = books.filter((b) => b.status === "active");
+  const activeBooks = books.filter((b) => b.status === "active");
   const finishedBooks = books.filter((b) => b.status !== "active");
-
-  function getLatestEntry(book: Book) {
-    return undefined; // entries لود میشن داخل BookDetailSheet
-  }
 
   return (
     <>
@@ -34,7 +31,9 @@ export function ReadingModule({ userId }: Props) {
         {isLoading ? (
           <Section>
             <div className="flex flex-col gap-3">
-              {[1, 2].map((i) => <BookCardSkeleton key={i} />)}
+              {[1, 2].map((i) => (
+                <BookCardSkeleton key={i} />
+              ))}
             </div>
           </Section>
         ) : isError ? (
@@ -54,6 +53,7 @@ export function ReadingModule({ userId }: Props) {
                     <BookCard
                       key={book.id}
                       book={book}
+                      latestEntry={latestEntries[book.id]}
                       onPress={() => setSelectedBook(book)}
                     />
                   ))}
@@ -68,6 +68,7 @@ export function ReadingModule({ userId }: Props) {
                     <BookCard
                       key={book.id}
                       book={book}
+                      latestEntry={latestEntries[book.id]}
                       onPress={() => setSelectedBook(book)}
                     />
                   ))}
@@ -101,10 +102,7 @@ export function ReadingModule({ userId }: Props) {
       {/* Add Book — Bottom Sheet */}
       {showAddForm && (
         <BottomSheet onClose={() => setShowAddForm(false)}>
-          <AddBookForm
-            userId={userId}
-            onClose={() => setShowAddForm(false)}
-          />
+          <AddBookForm userId={userId} onClose={() => setShowAddForm(false)} />
         </BottomSheet>
       )}
     </>
@@ -117,7 +115,7 @@ function BottomSheet({
   onClose,
 }: {
   children: React.ReactNode;
-  onClose:  () => void;
+  onClose: () => void;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
@@ -126,6 +124,7 @@ function BottomSheet({
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       />
+
       {/* sheet */}
       <div className="relative bg-surface-2 rounded-sheet rounded-b-none border-t border-border shadow-sheet max-h-[90vh] overflow-y-auto">
         {children}

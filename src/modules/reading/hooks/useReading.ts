@@ -1,3 +1,4 @@
+import { getLatestEntriesForBooks } from "../services/readingService";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getBooks,
@@ -35,6 +36,9 @@ export function useAddReadingEntry(userId: string, bookId: string) {
         queryKey: ["reading_entries", userId, bookId],
       });
       queryClient.invalidateQueries({ queryKey: ["books", userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["latest_reading_entries", userId],
+      });
     },
   });
 }
@@ -47,6 +51,9 @@ export function useDeleteLastEntry(userId: string, bookId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["reading_entries", userId, bookId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["latest_reading_entries", userId],
       });
     },
   });
@@ -76,5 +83,13 @@ export function useMarkFinished(userId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books", userId] });
     },
+  });
+}
+
+export function useLatestReadingEntries(userId: string) {
+  return useQuery({
+    queryKey: ["latest_reading_entries", userId],
+    queryFn: () => getLatestEntriesForBooks(userId),
+    enabled: !!userId,
   });
 }

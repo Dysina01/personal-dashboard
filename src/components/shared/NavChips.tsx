@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { type Tab } from "@/types";
-import { useRef } from "react";
 
 interface Props {
   tabs: Tab[];
@@ -12,26 +11,47 @@ interface Props {
 
 export function NavChips({ tabs, activeTab, onChange }: Props) {
   return (
-    <div className="overflow-x-auto scrollbar-none px-5 pb-2.5">
-      <div className="flex gap-1.5 w-max">
-        {tabs.map((tab) => {
-          const isActive = tab.id === activeTab;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onChange(tab.id)}
+    <div className="grid grid-cols-2 gap-3 px-5 pb-4 pt-1">
+      {tabs.map((tab) => {
+        const isActive = tab.id === activeTab;
+        return (
+          <button
+            key={tab.id}
+            onClick={() => onChange(tab.id)}
+            className={cn(
+              "flex items-center gap-3 rounded-card border p-3.5 text-left transition-all duration-fast active:scale-[0.97]",
+              isActive
+                ? "border-accent/30 bg-accent-50 shadow-card"
+                : "border-border bg-surface-1 shadow-card",
+            )}
+          >
+            {/* 👇 جای آیکون — کامپوننت آیکون خودتو اینجا جایگزین کن */}
+            <div
               className={cn(
-                "h-8 px-4 rounded-chip text-callout font-medium whitespace-nowrap border transition-all duration-fast active:scale-[0.96]",
+                "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
                 isActive
-                  ? "bg-text-primary text-surface-0 border-transparent"
-                  : "bg-transparent text-text-tertiary border-border-strong",
+                  ? "bg-accent text-white"
+                  : "bg-fill-primary text-text-tertiary",
+              )}
+            >
+              {tab.icon ?? (
+                <span className="text-callout font-semibold">
+                  {tab.label.charAt(0)}
+                </span>
+              )}
+            </div>
+
+            <span
+              className={cn(
+                "text-callout font-medium",
+                isActive ? "text-text-primary" : "text-text-secondary",
               )}
             >
               {tab.label}
-            </button>
-          );
-        })}
-      </div>
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
