@@ -4,11 +4,11 @@ import { QueryProvider } from "@/components/shared/QueryProvider";
 import { MonthSelector } from "@/components/shared/MonthSelector";
 import { NavChips } from "@/components/shared/NavChips";
 import { useDashboardStore } from "@/stores/dashboardStore";
-import { TABS } from "@/types";
+import { TABS, type TabId } from "@/types";
 import { HabitsModule } from "@/modules/habits/HabitsModule";
 import { ReadingModule } from "@/modules/reading/ReadingModule";
+import { GymModule } from "@/modules/gym/GymModule";
 
-// modules — بعداً اضافه میشن
 function Placeholder({ label }: { label: string }) {
   return (
     <div className="flex items-center justify-center h-64">
@@ -28,7 +28,7 @@ function DashboardContent({ userId }: { userId: string }) {
         <NavChips
           tabs={TABS}
           activeTab={activeTab}
-          onChange={(id) => setTab(id as any)}
+          onChange={(id) => setTab(id as TabId)}
         />
       </div>
 
@@ -39,7 +39,9 @@ function DashboardContent({ userId }: { userId: string }) {
           <HabitsModule userId={userId} month={selectedMonth} />
         )}{" "}
         {activeTab === "reading" && <ReadingModule userId={userId} />}{" "}
-        {activeTab === "gym" && <Placeholder label="Gym" />}
+        {activeTab === "gym" && (
+          <GymModule userId={userId} month={selectedMonth} />
+        )}
       </div>
     </div>
   );
