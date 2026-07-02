@@ -8,14 +8,7 @@ import { TABS, type TabId } from "@/types";
 import { HabitsModule } from "@/modules/habits/HabitsModule";
 import { ReadingModule } from "@/modules/reading/ReadingModule";
 import { GymModule } from "@/modules/gym/GymModule";
-
-function Placeholder({ label }: { label: string }) {
-  return (
-    <div className="flex items-center justify-center h-64">
-      <p className="text-callout text-text-muted">{label} coming soon</p>
-    </div>
-  );
-}
+import { AnalyticsModule } from "@/modules/analytics/AnalyticsModule";
 
 function DashboardContent({ userId }: { userId: string }) {
   const { selectedMonth, activeTab, setMonth, setTab } = useDashboardStore();
@@ -34,11 +27,13 @@ function DashboardContent({ userId }: { userId: string }) {
 
       {/* module content */}
       <div className="flex-1 overflow-y-auto">
-        {activeTab === "analytics" && <Placeholder label="Analytics" />}
+        {activeTab === "analytics" && (
+          <AnalyticsModule userId={userId} month={selectedMonth} />
+        )}
         {activeTab === "habits" && (
           <HabitsModule userId={userId} month={selectedMonth} />
-        )}{" "}
-        {activeTab === "reading" && <ReadingModule userId={userId} />}{" "}
+        )}
+        {activeTab === "reading" && <ReadingModule userId={userId} />}
         {activeTab === "gym" && (
           <GymModule userId={userId} month={selectedMonth} />
         )}
